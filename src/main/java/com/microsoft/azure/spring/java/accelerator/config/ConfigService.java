@@ -15,7 +15,7 @@ public class ConfigService {
 
     private ScheduledExecutorService scheduledExecutorService;
 
-    private RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     private volatile DumpSetting dumpSetting;
 
@@ -30,7 +30,7 @@ public class ConfigService {
 
     private void startPollingConfig() {
         scheduledExecutorService.scheduleAtFixedRate(
-            () -> pullConfig(),
+                this::pullConfig,
             5,
             10, // code hard for current
             TimeUnit.SECONDS);
