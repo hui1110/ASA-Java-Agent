@@ -8,8 +8,6 @@ import org.mockito.Mockito;
 
 import java.lang.instrument.Instrumentation;
 
-import static org.mockito.Mockito.verify;
-
 class JavaVersionTest {
 
     private final Instrumentation mockInstrumentation = Mockito.mock(Instrumentation.class);
