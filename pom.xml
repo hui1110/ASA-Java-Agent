@@ -20,6 +20,15 @@
   <dependencies>
 
     <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.5.14</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.13.5</version>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
       <version>${spring.web.version}</version>
@@ -46,32 +55,6 @@
       <scope>test</scope>
     </dependency>
 
-
-
-    <!--    <dependency>-->
-<!--      <groupId>com.taobao.arthas</groupId>-->
-<!--      <artifactId>arthas-agent</artifactId>-->
-<!--      <version>3.5.4</version>-->
-<!--      <scope>provided</scope>-->
-<!--      <exclusions>-->
-<!--        <exclusion>-->
-<!--          <groupId>io.grpc</groupId>-->
-<!--          <artifactId>grpc-core</artifactId>-->
-<!--        </exclusion>-->
-<!--      </exclusions>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.taobao.arthas</groupId>-->
-<!--      <artifactId>arthas-spy</artifactId>-->
-<!--      <version>3.5.4</version>-->
-<!--      <scope>provided</scope>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.taobao.arthas</groupId>-->
-<!--      <artifactId>arthas-core</artifactId>-->
-<!--      <version>3.5.4</version>-->
-<!--      <scope>provided</scope>-->
-<!--    </dependency>-->
   </dependencies>
 
   <build>
@@ -83,6 +66,10 @@
         <version>2.6</version>
         <configuration>
           <archive>
+<!--            <manifest>-->
+<!--              <addClasspath>true</addClasspath>-->
+<!--              <classpathPrefix>./lib/</classpathPrefix>-->
+<!--            </manifest>-->
             <manifestEntries>
               <Agent-Class>com.microsoft.azure.spring.java.accelerator.JaAgent</Agent-Class>
               <Premain-Class>com.microsoft.azure.spring.java.accelerator.JaAgent</Premain-Class>
@@ -92,6 +79,23 @@
           </archive>
         </configuration>
       </plugin>
+
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-dependency-plugin</artifactId>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>copy</id>-->
+<!--            <phase>package</phase>-->
+<!--            <goals>-->
+<!--              <goal>copy-dependencies</goal>-->
+<!--            </goals>-->
+<!--            <configuration>-->
+<!--              <outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+<!--            </configuration>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -106,12 +110,12 @@
             <configuration>
               <relocations>
                 <relocation>
-                  <pattern>org.springframework</pattern>
-                  <shadedPattern>ujagent_shaded.org.springframework</shadedPattern>
-                </relocation>
-                <relocation>
                   <pattern>org.apache</pattern>
                   <shadedPattern>ujagent_shaded.org.apache</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.fasterxml</pattern>
+                  <shadedPattern>ujagent_shaded.com.fasterxml</shadedPattern>
                 </relocation>
               </relocations>
               <filters>
