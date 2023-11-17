@@ -2,17 +2,13 @@ package com.microsoft.azure.spring.java.accelerator.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.spring.java.accelerator.common.JaThreadFactory;
-import com.microsoft.azure.spring.java.accelerator.model.DumpRequest;
 import com.microsoft.azure.spring.java.accelerator.model.DumpSetting;
 import com.microsoft.azure.spring.java.accelerator.profiler.DumpJstack;
-import org.apache.http.HttpEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
@@ -26,9 +22,9 @@ public class ConfigService {
 
     private ScheduledExecutorService scheduledExecutorService;
 
-    private CloseableHttpClient httpClient = HttpClients.createDefault();
+    private final CloseableHttpClient httpClient = HttpClients.createDefault();
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private volatile DumpSetting dumpSetting;
 
@@ -43,7 +39,7 @@ public class ConfigService {
 
     private void startPollingConfig() {
         scheduledExecutorService.scheduleAtFixedRate(
-            () -> pullConfig(),
+                this::pullConfig,
             5,
             10, // code hard for current
             TimeUnit.SECONDS);
@@ -52,7 +48,7 @@ public class ConfigService {
     private void pullConfig() {
         try {
             System.out.println("start to pull");
-            String url = "http://localhost:8080/config";
+            String url = "https://yonghui-apps-dev-agent-app.azuremicroservices.io/config";
             HttpPost httpPost = new HttpPost(url);
             List formParams = new ArrayList();
 //            formParams.add(new BasicNameValuePair("appId", appId));
